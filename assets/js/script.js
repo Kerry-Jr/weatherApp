@@ -56,20 +56,22 @@ $(document).ready(function () {
             method: "GET"
         })
             .then(function (response) {
-                console.log(response);
-                console.log(fiveUrl);
-                console.log(response.list.length);
+                // console.log(response);
+                // console.log(fiveUrl);
+                // console.log(response.list.length);
                 
-                var list = response.list;
+                var list = response.list; 
+                // console.log(list[10].main.temp);
                 // for(let i = 0; i < list.length; i++){
                 for (let i = 0; i <list.length; i++){
-                    let fiveCast = list[i].main;
-                   let temp = list[i].main.temp;
-                   let humidity = list[i].main.humidity;
-                   let date = list[i].
+                //     let fiveCast = list[i].main;
+                //    let temp = list[i].main.temp;
+                //    let humidity = list[i].main.humidity;
+                // //    let date = list[i].
                    
                    
-                    console.log(list[i].main.humidity);
+                   
+                    // console.log(list[i].main.humidity);
                     // console.log(fiveCast)
                 }
             })
