@@ -6,19 +6,104 @@ $(document).ready(function () {
     const $stateBox = $('.stateBox');
     const $submitBtn = $('.submitBtn');
     const apiKey = 'cb729ab815f55696fb5b98b5e8f340f6';
+    
+     let placesArr = [];
+
+    // onload();
 
     let timeDate = moment().format("LLLL")
-    // $("#currentDay").text(timeDate);
+    
 
-
-
-    $submitBtn.on('click', function () {
+        $submitBtn.on('click', function () {
         let city = $cityBox.val().trim();
         let state = $stateBox.val().trim();
-        dailyWeather(city, state);
-
+        
+       
+        // let placesArr = []; // this is the original place I had it -
+       
+        placesArr.push(city);
+        placesArr.push(state);
+        var savedHistory = JSON.stringify(placesArr);
+        // // console.log(savedHistory);
+        var setHistory = localStorage.setItem('history', placesArr);
+            
+        
+        let getHistory = JSON.stringify(localStorage.getItem('history'));
+        if(localStorage.getItem('history') == null) {
+            console.log('no history found');
+            return;
+        } else {
+            for (var i = 0; i < savedHistory.length; i++);{
+                 let $tiles = $('<div>');
+            console.log(savedHistory[i]);
+            }
+           
+        }
+        // $searchHistory.append(getHistory);
+       
+        
+      
+    //    onload();
+          dailyWeather(city, state);
+          
+    //    renderWeatherHistory();
+    //    console.log(placesArr);
     })
+// 
+     
+        // function onload(){
+        //    let searchedHistory = JSON.stringify(localStorage.getItem('history','')) || [];
+        //     if (localStorage.getItem('history') == null) {
+        //         console.log('no history found');
+        //         return;
+        //      }else {
+        //        for(i = 0; i < searchedHistory.length; i++);{
+        //             let $tiles = $('<button>').attr('class', 'btn btn-primary');
+        //         // let $historyBtn = $('<button>').attr('class',' btn btn-success btn-lg btn-block');
+        //         console.log($searchHistory[i]);
+                
+                
+        //         $searchHistory.append($tiles);
+        //        }
+                
+                
+               
 
+        //     }
+        // }
+
+
+
+
+            //function onload() {
+//         let searchedHistory = JSON.parse(localStorage.getItem('history')) || [];
+//         if(localStorage.getItem('history') == null) {
+//             console.log('no weather history found...sorry');
+//             return;
+//         }else {
+//             for (let i = 0; i < searchedHistory.length; i++) {
+//                 console.log(searchedHistory[i]);
+//                 let name = $('<li>');
+//                 name.addClass('list-group-item');
+//                 name.text(searchedHistory[i]);
+//                 $fiveDay.appendChild(name);
+//             }
+//         }
+//     }
+
+
+
+    
+//     function renderWeatherHistory (){
+//         let searchHistory = JSON.stringify(localStorage.getItem('history')) || [];
+//         let placesArr = [];
+//         searchHistory.push(placesArr);
+//         localStorage.setItem('history',searchHistory);
+//   }
+
+    
+    
+    
     function dailyWeather(city, state) {
         const queryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city},${state}&appid=${apiKey}`;
         $.ajax({
@@ -37,10 +122,10 @@ $(document).ready(function () {
                 let lon = response.coord.lon;
 
                 let $name = $('<h3>').text(name).attr('class', 'name');
-                let $temp = $('<p>').text(temp).attr('class', 'temp');
+                let $temp = $('<p>').text(`Temp: ${temp}`).attr('class', 'temp');
                 let $icon = $('<img>').attr('src', `http://openweathermap.org/img/w/${icon}.png`);
-                let $windSpeed = $('<p>').text(windSpeed).attr('class', 'wind');
-                let $humidity = $('<p>').text(humidity).attr('class', 'humidity');
+                let $windSpeed = $('<p>').text(`Wind: ${windSpeed}`).attr('class', 'wind');
+                let $humidity = $('<p>').text(`Humidity: ${humidity}`).attr('class', 'humidity');
                 
                 $daily.append($name);
                 $daily.append($icon);
@@ -48,8 +133,10 @@ $(document).ready(function () {
                 $daily.append($windSpeed);
                 $daily.append($humidity);
                 
-                forcastFive(city, state);
                 uvIndex(lat,lon);
+                // onload();
+                forcastFive(city, state);
+               
             })
     }
 
@@ -66,14 +153,8 @@ $(document).ready(function () {
             
                 $daily.append($uvIndex);
                 
-                dailyWeather();
-                
-                //forcastFive(city, state);
             })
-
-
-
-    }
+}
 
     function forcastFive(city, state) {
         const fiveUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city},${state}&appid=${apiKey}`;
@@ -91,39 +172,33 @@ $(document).ready(function () {
 
                     if (date === '12') {
                         let temp = list[i].main.temp
-                        // let calcTemp = (temp - 273.15) * 1.80 + 32;
-                        // let tempF = Math.floor(calcTemp);
-                        
-                        // console.log(temp);
                         let humidity = list[i].main.humidity;
+                        console.log(humidity);
+                        console.log(temp);
                         let icon = list[i].weather[0].icon;
-
+                        
                         let $temp = $('<p>').text(temp).attr('class', 'temp');
-                        // let $date = $('<p>').text(date).attr('class', 'date');
                         let $humidity = $('<p>').text(humidity).attr('class', 'humidity');
                         let $icon = $('<img>').attr('src', `http://openweathermap.org/img/w/${icon}.png`).attr('class', 'weatherImg');
-
                         let $divEl = $('<div>').attr('class', 'card');
                         
                         $divEl.append($icon);
                         $divEl.append($temp);
                         $divEl.append($humidity);
-                        // $divEl.append($date);
-                        
+                       
                         $fiveDay.append($divEl);
-                        
-
-                        
-                        // console.log(tempF);
                     }
-
-
                 }
             })
-
-
     }
 
+//   onload();
 
+}); 
 
-});
+// let placesArr = [];
+        // placesArr.push(city);
+        // placesArr.push(state);
+        // let savedHistory = JSON.stringify(placesArr);
+        // // console.log(savedHistory);
+        // let setHistory = localStorage.setItem('history', placesArr);
