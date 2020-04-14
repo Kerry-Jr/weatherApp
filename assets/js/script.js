@@ -7,103 +7,69 @@ $(document).ready(function () {
     const $submitBtn = $('.submitBtn');
     const apiKey = 'cb729ab815f55696fb5b98b5e8f340f6';
     
-     let placesArr = [];
-
-    // onload();
-
-    let timeDate = moment().format("LLLL")
+    onload();
     
+    const $refreshBtn = $('.refresh');
+    
+    let timeDate = moment().format("LLLL")
 
-        $submitBtn.on('click', function () {
+    $submitBtn.on('click', function () {
         let city = $cityBox.val().trim();
         let state = $stateBox.val().trim();
+
+        savedHistory(city, state); 
+        dailyWeather(city, state);      
+    })
+
+    
+    
+    $refreshBtn.on('click', function (){
+        let savedCity = $('.refresh').attr('data-city');
+        let savedState = $('.refresh').attr('data-state');
         
-       
-        // let placesArr = []; // this is the original place I had it -
-       
-        placesArr.push(city);
-        placesArr.push(state);
-        var savedHistory = JSON.stringify(placesArr);
-        // // console.log(savedHistory);
-        var setHistory = localStorage.setItem('history', placesArr);
-            
         
-        let getHistory = JSON.stringify(localStorage.getItem('history'));
-        if(localStorage.getItem('history') == null) {
-            console.log('no history found');
+        dailyWeather(`${savedCity}, ${savedState}`);
+        forcastFive(savedCity, savedState);
+    })
+
+    function onload() {
+        let searchedHistory = JSON.parse(localStorage.getItem('history')) || [];
+        if (localStorage.getItem('history') == null) {
+            console.log('no weather history found...sorry');
             return;
         } else {
-            for (var i = 0; i < savedHistory.length; i++);{
-                 let $tiles = $('<div>');
-            console.log(savedHistory[i]);
+            for (let i = 0; i < searchedHistory.length; i++) {
+                console.log(searchedHistory[i]);
+                let name = $('<button>');
+                name.addClass('btn btn-info btn-block history');
+                name.addClass('refresh');
+                name.text(`${searchedHistory[i].cityname}, ${searchedHistory[i].statename}`);
+                name.attr('data-city', searchedHistory[i].cityname)
+                name.attr('data-state', searchedHistory[i].statename)
+                $searchHistory.append(name);
+                
             }
-           
         }
-        // $searchHistory.append(getHistory);
-       
-        
-      
-    //    onload();
-          dailyWeather(city, state);
-          
-    //    renderWeatherHistory();
-    //    console.log(placesArr);
-    })
-// 
-     
-        // function onload(){
-        //    let searchedHistory = JSON.stringify(localStorage.getItem('history','')) || [];
-        //     if (localStorage.getItem('history') == null) {
-        //         console.log('no history found');
-        //         return;
-        //      }else {
-        //        for(i = 0; i < searchedHistory.length; i++);{
-        //             let $tiles = $('<button>').attr('class', 'btn btn-primary');
-        //         // let $historyBtn = $('<button>').attr('class',' btn btn-success btn-lg btn-block');
-        //         console.log($searchHistory[i]);
-                
-                
-        //         $searchHistory.append($tiles);
-        //        }
-                
-                
-               
-
-        //     }
-        // }
+    }
 
 
 
-
-            //function onload() {
-//         let searchedHistory = JSON.parse(localStorage.getItem('history')) || [];
-//         if(localStorage.getItem('history') == null) {
-//             console.log('no weather history found...sorry');
-//             return;
-//         }else {
-//             for (let i = 0; i < searchedHistory.length; i++) {
-//                 console.log(searchedHistory[i]);
-//                 let name = $('<li>');
-//                 name.addClass('list-group-item');
-//                 name.text(searchedHistory[i]);
-//                 $fiveDay.appendChild(name);
-//             }
-//         }
-//     }
+    // give a custom class to each button ,
+    // put a click listen on that class ,
+    // onclick grab city and state values from data atrributes ,and pass them to get weather function as args.
 
 
 
-    
-//     function renderWeatherHistory (){
-//         let searchHistory = JSON.stringify(localStorage.getItem('history')) || [];
-//         let placesArr = [];
-//         searchHistory.push(placesArr);
-//         localStorage.setItem('history',searchHistory);
-//   }
+    function savedHistory(city, state) {
+        let history = JSON.parse(localStorage.getItem('history')) || [];
+        let cityState = {
+            cityname: city,
+            statename: state
+        }
+        history.push(cityState);
+        localStorage.setItem('history', JSON.stringify(history));
+    }
 
-    
-    
-    
     function dailyWeather(city, state) {
         const queryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city},${state}&appid=${apiKey}`;
         $.ajax({
@@ -111,8 +77,7 @@ $(document).ready(function () {
             method: "GET"
         })
             .then(function (response) {
-                // console.log(response);
-                // console.log(queryUrl);
+
                 let name = response.name;
                 let temp = response.main.temp;
                 let icon = response.weather[0].icon;
@@ -126,35 +91,35 @@ $(document).ready(function () {
                 let $icon = $('<img>').attr('src', `http://openweathermap.org/img/w/${icon}.png`);
                 let $windSpeed = $('<p>').text(`Wind: ${windSpeed}`).attr('class', 'wind');
                 let $humidity = $('<p>').text(`Humidity: ${humidity}`).attr('class', 'humidity');
-                
+
                 $daily.append($name);
                 $daily.append($icon);
                 $daily.append($temp);
                 $daily.append($windSpeed);
                 $daily.append($humidity);
-                
-                uvIndex(lat,lon);
-                // onload();
+
+                uvIndex(lat, lon);
+
                 forcastFive(city, state);
-               
+
             })
     }
 
-    function uvIndex(lat,lon) {
+    function uvIndex(lat, lon) {
         const uvUrl = `https://api.openweathermap.org/data/2.5/uvi?appid=${apiKey}&lat=${lat}&lon=${lon}`;
 
         $.ajax({
             url: uvUrl,
             method: "GET"
         })
-            .then(function (response){
-               let uvIndex = response.value;
-               let $uvIndex = $('<p>').text(uvIndex).attr('class', 'uvIdx');
-            
+            .then(function (response) {
+                let uvIndex = response.value;
+                let $uvIndex = $('<p>').text(uvIndex).attr('class', 'uvIdx');
+
                 $daily.append($uvIndex);
-                
+
             })
-}
+    }
 
     function forcastFive(city, state) {
         const fiveUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city},${state}&appid=${apiKey}`;
@@ -176,29 +141,19 @@ $(document).ready(function () {
                         console.log(humidity);
                         console.log(temp);
                         let icon = list[i].weather[0].icon;
-                        
+
                         let $temp = $('<p>').text(temp).attr('class', 'temp');
                         let $humidity = $('<p>').text(humidity).attr('class', 'humidity');
                         let $icon = $('<img>').attr('src', `http://openweathermap.org/img/w/${icon}.png`).attr('class', 'weatherImg');
                         let $divEl = $('<div>').attr('class', 'card');
-                        
+
                         $divEl.append($icon);
                         $divEl.append($temp);
                         $divEl.append($humidity);
-                       
+
                         $fiveDay.append($divEl);
                     }
                 }
             })
     }
-
-//   onload();
-
-}); 
-
-// let placesArr = [];
-        // placesArr.push(city);
-        // placesArr.push(state);
-        // let savedHistory = JSON.stringify(placesArr);
-        // // console.log(savedHistory);
-        // let setHistory = localStorage.setItem('history', placesArr);
+});

@@ -1,6 +1,25 @@
+body {
+    background-color:#eaebe8;
+}
+
+.refresh {
+    background-color: #499;
+}
 .card {
     display: inline-flex;
     width: 130px;
     padding-right: 10px;
-    
+    background-color: #5684bf;
+    margin-right: 15px;
 }
+.history {
+    margin top: 10px;
+    display: inline;
+}
+#submit {
+    margin-bottom: 30px;
+} 
+.searchHistory {
+    height: 10px;
+}
+
