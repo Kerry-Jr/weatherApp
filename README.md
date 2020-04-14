@@ -29,7 +29,7 @@ This project presented multiple logistical challenges. Having three seperate API
 8.) jQuery
 
 Screen of app
-![Weather app screenshot] (Homework06/assets/images/app.PNG)
+![Weather app screenshot] ./assets/images/app.PNG
 
 
 By: Kerry Smith 04-13-2020 
