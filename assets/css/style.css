@@ -7,19 +7,45 @@ body {
 }
 .card {
     display: inline-flex;
-    width: 130px;
-    padding-right: 10px;
+    width: 230px;
+    padding: 10px;
     background-color: #5684bf;
     margin-right: 15px;
+    color: whitesmoke;
 }
 .history {
     margin top: 10px;
     display: inline;
 }
-#submit {
+#submit, #clear {
     margin-bottom: 30px;
 } 
 .searchHistory {
     height: 10px;
 }
 
+.weatherImg {
+    height: 65px;
+    width:65px;
+}
+
+.green {
+background-color: green;
+color: whitesmoke;
+max-width: 150px;
+text-align: center;
+}
+
+.yellow {
+background-color: yellow;
+color: black;
+max-width: 150px;
+text-align: center;
+}
+
+.red {
+background-color: red;
+color:whitesmoke;
+max-width: 150px;
+text-align: center;
+}

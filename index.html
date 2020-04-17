@@ -14,17 +14,28 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col">
-                <h1 class="display-3 bg-dark text-light p-4 ">Weather API</h1>
+            <div class="col-8 offset-2">
+                <h1 class="display-3 bg-dark text-light p-4">Weather App</h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-4 searchDiv">
-                <input type="text" placeholder="City" class="cityBox">
-                <input type="text" placeholder="State" class="stateBox">
-                <button class="submitBtn btn btn-primary btn-sm" id="submit">Search</button>
+            <div class="col-2 offset-2 searchDiv">
+                <div class ="instructions">
+                    <p>Please enter a city and state for your local weather</p>
+                </div>
+                
+                <div class="searchFields">
+                    <input type="text" placeholder="City" class="cityBox" title="Only letters and spaces permitted" onkeypress="return (event.charCode > 64 && 
+                    event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)  || (event.charCode === 32)" >
+                    <input type="text" placeholder="State" class="stateBox" title="Only letters and spaces permitted" onkeypress="return (event.charCode > 64 && 
+                    event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode === 32)">
+                </div>
+                <div class="buttons">
+                    <button class="submitBtn btn btn-primary btn-sm" id="submit">Search</button>
+                    <button class="clearBtn btn btn-danger btn-sm" id="clear">Clear</button>
+                </div>
 
                 <div class="searchHistory">
 
@@ -55,6 +66,7 @@
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="assets/js/script.js"></script>
+    
 </body>
 
 </html>

@@ -6,6 +6,12 @@ $(document).ready(function () {
     const $stateBox = $('.stateBox');
     const $submitBtn = $('.submitBtn');
     const apiKey = 'cb729ab815f55696fb5b98b5e8f340f6';
+    const $clearBtn = $('.clearBtn');
+    
+    $clearBtn.on('click', function(){
+        localStorage.clear();
+        onload();
+    })
     
     onload();
     
@@ -16,23 +22,41 @@ $(document).ready(function () {
     $submitBtn.on('click', function () {
         let city = $cityBox.val().trim();
         let state = $stateBox.val().trim();
-
+        $cityBox.empty();
+        $stateBox.empty();
         savedHistory(city, state); 
-        dailyWeather(city, state);      
-    })
+        dailyWeather(city, state);   
+    });
+        
+        
 
+       
+            
+        
+        
+    
+
+//after capture values do all checks neither of them are empty , no number , if passed then call the two below 
     
     
     $refreshBtn.on('click', function (){
-        let savedCity = $('.refresh').attr('data-city');
-        let savedState = $('.refresh').attr('data-state');
+        // let savedCity = $('.refresh').attr('data-city');
+        // let savedState = $('.refresh').attr('data-state');
+        
+        let savedCity = $(this).data('city');
+        let savedState = $(this).data('state');
         
         
-        dailyWeather(`${savedCity}, ${savedState}`);
-        forcastFive(savedCity, savedState);
+        console.log(this);
+        
+        
+        dailyWeather(savedCity, savedState);
+       
     })
 
+    
     function onload() {
+        $searchHistory.empty();
         let searchedHistory = JSON.parse(localStorage.getItem('history')) || [];
         if (localStorage.getItem('history') == null) {
             console.log('no weather history found...sorry');
@@ -52,14 +76,6 @@ $(document).ready(function () {
         }
     }
 
-
-
-    // give a custom class to each button ,
-    // put a click listen on that class ,
-    // onclick grab city and state values from data atrributes ,and pass them to get weather function as args.
-
-
-
     function savedHistory(city, state) {
         let history = JSON.parse(localStorage.getItem('history')) || [];
         let cityState = {
@@ -68,10 +84,13 @@ $(document).ready(function () {
         }
         history.push(cityState);
         localStorage.setItem('history', JSON.stringify(history));
+        onload();
     }
 
     function dailyWeather(city, state) {
-        const queryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city},${state}&appid=${apiKey}`;
+        const queryUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city},${state}&appid=${apiKey}&units=imperial`;
+        $daily.empty();
+        
         $.ajax({
             url: queryUrl,
             method: "GET"
@@ -107,23 +126,33 @@ $(document).ready(function () {
 
     function uvIndex(lat, lon) {
         const uvUrl = `https://api.openweathermap.org/data/2.5/uvi?appid=${apiKey}&lat=${lat}&lon=${lon}`;
-
+       
         $.ajax({
             url: uvUrl,
             method: "GET"
         })
             .then(function (response) {
                 let uvIndex = response.value;
-                let $uvIndex = $('<p>').text(uvIndex).attr('class', 'uvIdx');
+                let $uvIndex = $('<p>').text(`UV Index: ${uvIndex}`).attr('class', 'uvIdx');
+                
+                if(uvIndex <= 3){
+                   $uvIndex.attr('class', 'green'); 
+                }else if( uvIndex > 3 && uvIndex < 6) {
+                    $uvIndex.attr('class', 'yellow');;
+                }else if(uvIndex >= 6){
+                    $uvIndex.attr('class', 'red');
+                }
 
                 $daily.append($uvIndex);
 
             })
     }
 
-    function forcastFive(city, state) {
-        const fiveUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city},${state}&appid=${apiKey}`;
+    
 
+    function forcastFive(city, state) {
+        const fiveUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city},${state}&appid=${apiKey}&units=imperial`;
+        $fiveDay.empty();
         $.ajax({
             url: fiveUrl,
             method: "GET"
@@ -134,6 +163,8 @@ $(document).ready(function () {
                 for (let i = 0; i < list.length; i++) {
                     let rawDate = list[i].dt_txt;
                     let date = moment(rawDate).format('H');
+                   
+
 
                     if (date === '12') {
                         let temp = list[i].main.temp
@@ -141,12 +172,15 @@ $(document).ready(function () {
                         console.log(humidity);
                         console.log(temp);
                         let icon = list[i].weather[0].icon;
-
-                        let $temp = $('<p>').text(temp).attr('class', 'temp');
-                        let $humidity = $('<p>').text(humidity).attr('class', 'humidity');
+                        let displayDate = moment(rawDate).format('LL');
+                        
+                        let $temp = $('<p>').text(`Temp: ${temp}`).attr('class', 'temp');
+                        let $humidity = $('<p>').text(`Humidity: ${humidity}`).attr('class', 'humidity');
                         let $icon = $('<img>').attr('src', `http://openweathermap.org/img/w/${icon}.png`).attr('class', 'weatherImg');
                         let $divEl = $('<div>').attr('class', 'card');
-
+                        let $dateEl = $('<h5>').text(displayDate);
+                        
+                        $divEl.append($dateEl);
                         $divEl.append($icon);
                         $divEl.append($temp);
                         $divEl.append($humidity);
