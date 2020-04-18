@@ -8,6 +8,8 @@ $(document).ready(function () {
     const apiKey = 'cb729ab815f55696fb5b98b5e8f340f6';
     const $clearBtn = $('.clearBtn');
     
+  
+
     $clearBtn.on('click', function(){
         localStorage.clear();
         onload();
@@ -22,44 +24,47 @@ $(document).ready(function () {
     $submitBtn.on('click', function () {
         let city = $cityBox.val().trim();
         let state = $stateBox.val().trim();
-        $cityBox.empty();
-        $stateBox.empty();
+        
+      
+      
+            
+        // if(city.val() == ' ') {
+        //     $('.$submitBtn').prop('disabled', true);
+        //         }else {
+        //             city.prop('disabled', false);
+        //       }
+        
+        
+        
+       
+           
+        
+        
+        
+        
+       
+        
+        
+        $cityBox.val('');
+        $stateBox.val('');
         savedHistory(city, state); 
         dailyWeather(city, state);   
     });
         
-        
-
-       
-            
-        
-        
-    
-
-//after capture values do all checks neither of them are empty , no number , if passed then call the two below 
-    
-    
     $refreshBtn.on('click', function (){
-        // let savedCity = $('.refresh').attr('data-city');
-        // let savedState = $('.refresh').attr('data-state');
         
         let savedCity = $(this).data('city');
         let savedState = $(this).data('state');
-        
-        
-        console.log(this);
-        
         
         dailyWeather(savedCity, savedState);
        
     })
 
-    
     function onload() {
         $searchHistory.empty();
         let searchedHistory = JSON.parse(localStorage.getItem('history')) || [];
         if (localStorage.getItem('history') == null) {
-            console.log('no weather history found...sorry');
+            console.log('no weather history found...');
             return;
         } else {
             for (let i = 0; i < searchedHistory.length; i++) {
@@ -142,13 +147,9 @@ $(document).ready(function () {
                 }else if(uvIndex >= 6){
                     $uvIndex.attr('class', 'red');
                 }
-
                 $daily.append($uvIndex);
-
             })
     }
-
-    
 
     function forcastFive(city, state) {
         const fiveUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city},${state}&appid=${apiKey}&units=imperial`;
@@ -164,9 +165,7 @@ $(document).ready(function () {
                     let rawDate = list[i].dt_txt;
                     let date = moment(rawDate).format('H');
                    
-
-
-                    if (date === '12') {
+                        if (date === '12') {
                         let temp = list[i].main.temp
                         let humidity = list[i].main.humidity;
                         console.log(humidity);
@@ -190,4 +189,20 @@ $(document).ready(function () {
                 }
             })
     }
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
 });

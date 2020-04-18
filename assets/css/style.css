@@ -13,15 +13,14 @@ body {
     margin-right: 15px;
     color: whitesmoke;
 }
-.history {
-    margin top: 10px;
-    display: inline;
-}
+
+
 #submit, #clear {
-    margin-bottom: 30px;
+    margin-top: 12px;
 } 
 .searchHistory {
     height: 10px;
+    margin-top: 15px;
 }
 
 .weatherImg {

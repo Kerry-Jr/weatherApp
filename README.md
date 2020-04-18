@@ -19,8 +19,7 @@ This project presented multiple logistical challenges. Having three seperate API
 
 ## HOW I BUILT AND TECH USED
 
-1.) Declared multiple variables 
-2.) For loops, if statements, and DOM manipulation.
+1.) API
 3.) HTML
 4.) CSS
 5.) JAVASCRIPT
@@ -29,7 +28,7 @@ This project presented multiple logistical challenges. Having three seperate API
 8.) jQuery
 
 Screen of app
-![Weather app screenshot] ./assets/images/app.PNG
+![image](./assets/images/app.PNG)
 
 
 By: Kerry Smith 04-13-2020 
