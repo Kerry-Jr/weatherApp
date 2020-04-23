@@ -89,7 +89,7 @@ $(document).ready(function () {
         }
         history.push(cityState);
         localStorage.setItem('history', JSON.stringify(history));
-        onload();
+    
     }
 
     function dailyWeather(city, state) {
