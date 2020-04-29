@@ -2,9 +2,9 @@ body {
     background-color:#eaebe8;
 }
 
-.refresh {
+/* .refresh {
     background-color: #499;
-}
+} */
 .card {
     display: inline-flex;
     width: 230px;

@@ -25,39 +25,21 @@ $(document).ready(function () {
         let city = $cityBox.val().trim();
         let state = $stateBox.val().trim();
         
-      
-      
-            
-        // if(city.val() == ' ') {
-        //     $('.$submitBtn').prop('disabled', true);
-        //         }else {
-        //             city.prop('disabled', false);
-        //       }
-        
-        
-        
-       
-           
-        
-        
-        
-        
-       
-        
-        
         $cityBox.val('');
         $stateBox.val('');
         savedHistory(city, state); 
-        dailyWeather(city, state);   
+        dailyWeather(city, state);
+        // onload();
+          
     });
         
-    $refreshBtn.on('click', function (){
+    $(document).on('click', '.refresh', function (){
         
         let savedCity = $(this).data('city');
         let savedState = $(this).data('state');
-        
+      
         dailyWeather(savedCity, savedState);
-       
+    //    onload();
     })
 
     function onload() {
@@ -89,7 +71,7 @@ $(document).ready(function () {
         }
         history.push(cityState);
         localStorage.setItem('history', JSON.stringify(history));
-    
+        onload();
     }
 
     function dailyWeather(city, state) {
